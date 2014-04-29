@@ -10,17 +10,51 @@
 </head>
 <body>
 <div class="row">
-	<div class="large-5 large-centered columns header"><h1>Jselect</h1></div>
+	<div class="large-2 large-centered columns header"><h1>Jselect</h1></div>
 </div>
 <div class="row">
-	
+	<div class="large-12 columns">
+		<div class="row">
+			<div class="large-6 columns"><textarea name="" id="inputHTML" cols="30" rows="20"></textarea></div>
+			<div class="large-6 columns rendering"></div>
+		</div>
+	</div>
 </div>
 <div class="row">
 	
 </div>
 <script>
-	$(document).ready(function() {
-		
+	$(document).ready(function() {  
+
+		var inputHTML;
+		function init() {
+			setHandlers();
+		}
+
+		function setHandlers() {
+			$('#inputHTML').on('paste', function () {
+	  			var element = this;
+	  			setTimeout(function () {
+    				updateOutput();
+	  			}, 100);
+	  			
+			});	
+		}
+
+		function updateOutput() {
+			setInterval(function(){
+				inputHTML = $("#inputHTML").val();
+				render();
+			}	
+			,100);
+		}
+
+		function render() {
+			if($(".rendering").empty()) {
+				$(".rendering").text(inputHTML);	
+			}
+		}
+		init();
 	});
 </script>
 </body>
