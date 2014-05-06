@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<script src="js/jquery.js"></script>
 	<script src="js/foundation.min.js"></script>
+	<script src="js/taboverride.min.js"></script>
 	<link rel="stylesheet" href="css/foundation.min.css">
 	<link rel="stylesheet" href="css/style.css">
 	<title></title>
@@ -23,14 +24,29 @@
 <div class="row">
 	
 </div>
+
+<!-- <div class="parent">
+	<div class="child1">
+		<div class="lowerchild1"></div>
+		<div class="lowerchild2"></div>
+	</div>
+	<div class="child2">
+		<div class="lowerchild1"></div>
+		<div class="lowerchild2"></div>
+	</div>
+</div> -->
+
 <script>
 	$(document).ready(function() {
+		var txtarea = document.getElementById('inputHTML');
+		tabOverride.set(txtarea);
+		tabOverride.tabSize(4);
 		var inputHTML;
 		function init() {
 			setHandlers();
 		}
-		function drawElement(container, cls) {
-			var $div = $("<div>", {id: "", class: cls + " el"});
+		function drawElement(container, cls, elementName) {
+			var $div = $("<div>", {id: "", class: cls + " el", text : elementName});
 			container.append($div);
 			return $div;
 		}
@@ -41,33 +57,58 @@
     				inputHTML = $("#inputHTML").val();
 	  				render();
 	  			}, 100);
-	  			
-	  			
-			});	
+			});
 		}
 
 		function updateOutput() {
 			setInterval(function(){
 				inputHTML = $("#inputHTML").val();
 				render();
-			}	
+			}
 			,1000);
 		}
-
-		function render() {
+		/*TODO  : FINISH DRAW*/
+		function draw(element) {
+			console.log(element);
+			while(element.children().length > 0) {
+				element.children().each(function(){
+					var el = $(this);
+					drawElement(element, "c2", el[0].localName)
+					draw(el);
+				});
+			}
+		}
+/*		function render() {
 			var inputObj = $(inputHTML);
+			var inputObjName = inputObj[0].localName;
 			var renderZone = $(".renderingZone");
 			if(renderZone.empty()) {
-				var root = drawElement(renderZone, "root");
-				var children = inputObj.children().length;
+				var root = drawElement(renderZone, "root", inputObjName);
+				var rootChildren = inputObj.children().length;
 				inputObj.children().each(function() {
 					var el = $(this);
-			 		var c1 = drawElement(root, "c1");
-			 		c1.height(root.height()/children - 25);
-				 	if(!el.parent().hasClass('renderingZone')) {
-				 		
+		 			var elChildren = el.children().length;
+					var elName = el[0].localName;
+		 			var c1 = drawElement(root, "c1", elName);
+		 			c1.height(root.height()/rootChildren - 18);
+				 	if(elChildren > 0) {
+				 		el.children().each(function(){
+				 			var el = $(this);
+							var elName = el[0].localName;
+				 			var c2 = drawElement(c1, "c2", elName);
+				 			c2.height(c1.height()/elChildren - 30);
+				 		});
 		 			}
 				});
+			}
+		}	*/	
+		function render() {
+			var inputObj = $(inputHTML);
+			var inputObjName = inputObj[0].localName;
+			var renderZone = $(".renderingZone");
+			if(renderZone.empty()) {
+				var root = drawElement(renderZone, "root", inputObjName);
+				draw(inputObj);
 			}
 		}
 		init();
