@@ -25,19 +25,24 @@
 	
 </div>
 
-<!-- <div class="parent">
+<!-- 
+
+<div class="parent">
 	<div class="child1">
 		<div class="lowerchild1"></div>
 		<div class="lowerchild2"></div>
 	</div>
 	<div class="child2">
 		<div class="lowerchild1"></div>
-		<div class="lowerchild2"></div>
 	</div>
-</div> -->
+</div>
+
+-->
 
 <script>
 	$(document).ready(function() {
+		var drawn;
+		var layer = 0;
 		var txtarea = document.getElementById('inputHTML');
 		tabOverride.set(txtarea);
 		tabOverride.tabSize(4);
@@ -67,51 +72,56 @@
 			}
 			,1000);
 		}
-		/*TODO  : FINISH DRAW*/
-		function draw(element) {
-			console.log(element);
-			while(element.children().length > 0) {
+		/*TODO  : DEFINE LEVELS*/
+		function draw(element) {	
+			console.log(layer);
+			if($('.renderingZone').find('.root'))
+			if(element.children().length > 0) {
+
+				layer = layer + 1;
 				element.children().each(function(){
 					var el = $(this);
-					drawElement(element, "c2", el[0].localName)
+					drawn = drawElement(drawn, "c"+layer, el[0].localName)
 					draw(el);
 				});
 			}
+			return false;
 		}
-/*		function render() {
-			var inputObj = $(inputHTML);
-			var inputObjName = inputObj[0].localName;
-			var renderZone = $(".renderingZone");
-			if(renderZone.empty()) {
-				var root = drawElement(renderZone, "root", inputObjName);
-				var rootChildren = inputObj.children().length;
-				inputObj.children().each(function() {
-					var el = $(this);
-		 			var elChildren = el.children().length;
-					var elName = el[0].localName;
-		 			var c1 = drawElement(root, "c1", elName);
-		 			c1.height(root.height()/rootChildren - 18);
-				 	if(elChildren > 0) {
-				 		el.children().each(function(){
-				 			var el = $(this);
-							var elName = el[0].localName;
-				 			var c2 = drawElement(c1, "c2", elName);
-				 			c2.height(c1.height()/elChildren - 30);
-				 		});
-		 			}
-				});
-			}
-		}	*/	
 		function render() {
 			var inputObj = $(inputHTML);
 			var inputObjName = inputObj[0].localName;
 			var renderZone = $(".renderingZone");
 			if(renderZone.empty()) {
-				var root = drawElement(renderZone, "root", inputObjName);
+				drawn = drawElement(renderZone, "root", inputObjName);
 				draw(inputObj);
+				layer = 1;
 			}
 		}
 		init();
+		//function render() {
+		//	var inputObj = $(inputHTML);
+		//	var inputObjName = inputObj[0].localName;
+		//	var renderZone = $(".renderingZone");
+		//	if(renderZone.empty()) {
+		//		var root = drawElement(renderZone, "root", inputObjName);
+		//		var rootChildren = inputObj.children().length;
+		//		inputObj.children().each(function() {
+		//			var el = $(this);
+		// 			var elChildren = el.children().length;
+		//			var elName = el[0].localName;
+		// 			var c1 = drawElement(root, "c1", elName);
+		// 			c1.height(root.height()/rootChildren - 18);
+		//		 	if(elChildren > 0) {
+		//		 		el.children().each(function(){
+		//		 			var el = $(this);
+		//					var elName = el[0].localName;
+		//		 			var c2 = drawElement(c1, "c2", elName);
+		//		 			c2.height(c1.height()/elChildren - 30);
+		//		 		});
+		// 			}
+		//		});
+		//	}
+		//}		
 	});
 </script>
 </body>
