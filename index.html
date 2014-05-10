@@ -50,8 +50,9 @@
 		function init() {
 			setHandlers();
 		}
-		function drawElement(container, cls, elementName) {
+		function drawElement(container, cls, elementName, level) {
 			var $div = $("<div>", {id: "", class: cls + " el", text : elementName});
+			$div.level = level;
 			container.append($div);
 			return $div;
 		}
@@ -73,20 +74,18 @@
 			,1000);
 		}
 		/*TODO  : DEFINE LEVELS*/
-		function draw(element) {	
-			console.log(layer);
-			if($('.renderingZone').find('.root'))
+		function draw(element) {
 			if(element.children().length > 0) {
-
-				layer = layer + 1;
 				element.children().each(function(){
 					var el = $(this);
-					drawn = drawElement(drawn, "c"+layer, el[0].localName)
+					drawn = drawElement(drawn, "c1", el[0].localName);
 					draw(el);
 				});
 			}
-			return false;
+			else {
+			}
 		}
+		/*TODO : RESIZE DIVS*/
 		function render() {
 			var inputObj = $(inputHTML);
 			var inputObjName = inputObj[0].localName;
@@ -94,7 +93,6 @@
 			if(renderZone.empty()) {
 				drawn = drawElement(renderZone, "root", inputObjName);
 				draw(inputObj);
-				layer = 1;
 			}
 		}
 		init();
